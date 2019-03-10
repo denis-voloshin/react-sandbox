@@ -4,10 +4,13 @@ const path = require('path');
 const fs = require('fs');
 
 // Plugins
+const TerserWebpackPlugin = require('terser-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
 const PostcssFlexbugsFixes = require('postcss-flexbugs-fixes');
 const AutoPrefixer = require('autoprefixer');
+const Cssnano = require('cssnano');
 
 // Environment
 if (!fs.existsSync(path.resolve(__dirname, 'env.js'))) {
@@ -21,7 +24,7 @@ if (env.hasOwnProperty('NODE_PATH')) {
 
 // Webpack config
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   context: path.resolve(__dirname, '../src'),
   entry: {
     app: ['@babel/polyfill', './index.jsx']
@@ -45,12 +48,40 @@ module.exports = {
       'node_modules'
     ]
   },
-  devtool: 'eval-source-map',
-  devServer: {
-    historyApiFallback: true,
-    hot: true,
-    open: true,
-    port: 3000
+  devtool: false,
+  optimization: {
+    minimizer: [
+      new TerserWebpackPlugin({
+        terserOptions: {
+          output: {
+            comments: false,
+          },
+        },
+      })
+    ],
+    splitChunks: {
+      chunks: 'all',
+      maxInitialRequests: Infinity,
+      minSize: 0,
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          name(module) {
+            const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+
+            switch (packageName) {
+              case 'react':
+              case 'react-dom': {
+                return packageName;
+              }
+              default: {
+                return 'libs';
+              }
+            }
+          }
+        }
+      }
+    }
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -58,12 +89,23 @@ module.exports = {
       inject: true,
       template: path.resolve(__dirname, '../public/index.html'),
       title: 'React sandbox',
-      favicon: path.resolve(__dirname, '../public/favicon.ico')
+      favicon: path.resolve(__dirname, '../public/favicon.ico'),
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true
+      }
     }),
     new webpack.DefinePlugin({
       'process.env': JSON.stringify(env)
     }),
-    new webpack.HotModuleReplacementPlugin()
+    new ExtractTextWebpackPlugin('static/css/styles.[hash:10].css')
   ],
   module: {
     rules: [
@@ -95,38 +137,40 @@ module.exports = {
           },
           {
             test: /\.(css|styl)$/,
-            use: [
-              { loader: 'style-loader' },
-              {
-                loader: 'css-loader',
-                options: {
-                  modules: true,
-                  camelCase: true,
-                  importLoaders: 1,
-                  sourceMap: true,
-                  localIdentName: '[local]__[hash:5]'
-                }
-              },
-              {
-                loader: 'postcss-loader',
-                options: {
-                  ident: 'postcss',
-                  plugins: [
-                    PostcssFlexbugsFixes,
-                    AutoPrefixer({
-                      browsers: [
-                        '>1%',
-                        'last 4 versions',
-                        'Firefox ESR',
-                        'not ie < 9'
-                      ],
-                      flexbox: 'no-2009'
-                    })
-                  ]
-                }
-              },
-              { loader: 'stylus-loader' }
-            ]
+            use: ExtractTextWebpackPlugin.extract({
+              fallback: { loader: 'style-loader' },
+              use: [
+                {
+                  loader: 'css-loader',
+                  options: {
+                    modules: true,
+                    camelCase: true,
+                    sourceMap: true,
+                    localIdentName: '[local]__[hash:5]'
+                  }
+                },
+                {
+                  loader: 'postcss-loader',
+                  options: {
+                    ident: 'postcss',
+                    plugins: [
+                      PostcssFlexbugsFixes,
+                      AutoPrefixer({
+                        browsers: [
+                          '>1%',
+                          'last 4 versions',
+                          'Firefox ESR',
+                          'not ie < 9'
+                        ],
+                        flexbox: 'no-2009'
+                      }),
+                      Cssnano
+                    ]
+                  }
+                },
+                { loader: 'stylus-loader' }
+              ]
+            })
           },
           {
             exclude: [/\.jsx?$/, /\.html$/, /\.json$/, /\.styl$/],
