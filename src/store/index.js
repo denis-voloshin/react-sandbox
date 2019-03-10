@@ -5,7 +5,7 @@ import { userReducer } from '@Reducers/userReducer';
 
 const middleware = [];
 
-export default createStore(
+export const store = createStore(
   combineReducers({
     user: userReducer
   }),
