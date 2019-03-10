@@ -4,8 +4,6 @@ import { HomePage } from '@Views/home/HomePage';
 
 import './styles/app.styl';
 
-const App = () => (
-  <HomePage />
-);
+const App = () => <HomePage />;
 
 export { App };

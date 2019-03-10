@@ -6,7 +6,7 @@ import { useDocumentTitle } from '@Utils/hooks';
 
 import styles from './styles/styles.styl';
 
-const UserForm = (props) => {
+const UserForm = props => {
   const handleFormSubmit = e => {
     e.preventDefault();
   };
@@ -16,6 +16,7 @@ const UserForm = (props) => {
 
     if (!/^[a-z]*$/i.test(firstName)) {
       e.preventDefault();
+
       return;
     }
 
@@ -27,6 +28,7 @@ const UserForm = (props) => {
 
     if (!/^[a-z]*$/i.test(lastName)) {
       e.preventDefault();
+
       return;
     }
 

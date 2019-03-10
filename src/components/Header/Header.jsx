@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 
 import styles from './styles/header.styl';
 
-const Header = ({ firstName, lastName }) => {
-  return <header className={styles.header}>
+const Header = ({ firstName, lastName }) => (
+  <header className={styles.header}>
     <p className={styles.headerGreeting}>Hello, { firstName } { lastName }</p>
-  </header>;
-};
+  </header>
+);
 
 const mapStateToProps = ({ user }) => user;
 
