@@ -1,9 +1,9 @@
 # React sandbox
 ![](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/3a4ik/react-sandbox/master/package.json&label=version&query=$.version&colorB=blue)
 
-React sandbox with helpful libraries out of the box.
+[React](https://reactjs.org/) sandbox with helpful libraries out of the box.
 
-Also, it includes example of using redux and stylus.
+Also, it includes example of using [Redux](https://redux.js.org/) and [Stylus](http://stylus-lang.com/).
 
 ## Installation
 Install all required dependencies using
