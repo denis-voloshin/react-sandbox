@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { connect } from 'react-redux';
 
 import * as userActions from '@Actions/userActions';
@@ -7,11 +7,13 @@ import { useDocumentTitle } from '@Utils/hooks';
 import styles from './styles/styles.styl';
 
 const UserForm = props => {
-  const handleFormSubmit = e => {
-    e.preventDefault();
-  };
+  const handleFormSubmit = useCallback(
+    e => {
+      e.preventDefault();
+    }
+  );
 
-  const handleFirstNameChange = e => {
+  const handleFirstNameChange = useCallback(e => {
     const firstName = e.target.value;
 
     if (!/^[a-z]*$/i.test(firstName)) {
@@ -21,9 +23,9 @@ const UserForm = props => {
     }
 
     props.changeFirstName(firstName);
-  };
+  });
 
-  const handleLastNameChange = e => {
+  const handleLastNameChange = useCallback(e => {
     const lastName = e.target.value;
 
     if (!/^[a-z]*$/i.test(lastName)) {
@@ -33,7 +35,7 @@ const UserForm = props => {
     }
 
     props.changeLastName(lastName);
-  };
+  });
 
   useDocumentTitle(`Hello, ${props.firstName} ${props.lastName}`);
 
