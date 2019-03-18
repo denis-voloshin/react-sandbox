@@ -28,7 +28,8 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
-    filename: 'static/js/[name].[hash:10].js'
+    filename: 'static/js/[name].[hash:10].js',
+    publicPath: '/'
   },
   resolve: {
     alias: {
