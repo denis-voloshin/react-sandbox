@@ -1,6 +1,6 @@
 {
   "name": "react-sandbox",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "React sandbox",
   "main": "src/index.jsx",
   "scripts": {

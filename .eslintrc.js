@@ -254,7 +254,7 @@ module.exports = {
     "react/sort-comp": "warn",
     "react/style-prop-object": "error",
     "react/void-dom-elements-no-children": "error",
-    "react/jsx-boolean-value": ["warn", "always"],
+    "react/jsx-boolean-value": ["warn", "never"],
     "react/jsx-closing-bracket-location": ["warn", "line-aligned"],
     "react/jsx-closing-tag-location": "warn",
     "react/jsx-curly-spacing": "warn",
