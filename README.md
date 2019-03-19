@@ -3,7 +3,7 @@
 
 [React](https://reactjs.org/) sandbox with helpful libraries out of the box.
 
-Also, it includes example of using [Redux](https://redux.js.org/) and [Stylus](http://stylus-lang.com/).
+Also, it includes example of using [Redux](https://redux.js.org/), [Stylus](http://stylus-lang.com/) and [styled-components](https://www.styled-components.com/).
 
 ## Installation
 Install all required dependencies using
@@ -36,6 +36,43 @@ import './styles/app.styl';
 import headerStyles from './styles/header.styl';
 ```
 Style modules support regular and camelCased class names in your components.
+
+### Styled components
+Sandbox has [styled-components](https://www.styled-components.com/) included.
+
+You can write CSS inside your components, so you don't need to create `.css` file(s):
+```javascript
+import React from 'react';
+import styled from 'styled-components';
+
+const ButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Button = styled.button.attrs({
+  type: 'text'
+})`
+  outline: none;
+  background-color: ${props => (
+    props.success
+      ? '#0f0'
+      : '#00f'
+  )};
+  border-radius: 5px;
+  padding: 5px;
+  color: #fff;
+`;
+
+export default function() {
+  return (
+    <ButtonContainer>
+      <Button success />
+      <Button />
+    </ButtonContainer>
+  );
+}
+```
 
 ### Module path aliasing
 [Webpack](https://webpack.js.org/) allows you to import modules using aliases, instead of `../` hell:

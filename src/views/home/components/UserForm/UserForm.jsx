@@ -1,10 +1,50 @@
 import React, { useCallback } from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 
 import * as userActions from '@Actions/userActions';
 import { useDocumentTitle } from '@Utils/hooks';
 
-import styles from './styles/styles.styl';
+const UserFormContainer = styled.div`
+  border: 1px solid #000;
+  padding: 20px;
+  margin: 10px;
+  width: 300px;
+  background-color: #fff;
+`;
+
+const UserFormInputBlock = styled.p`
+  display: flex;
+  flex-direction: column;
+  
+  :not(:first-child) {
+    margin-top: 10px;
+  }
+  :not(:last-child) {
+    margin-bottom: 10px;
+  }
+`;
+
+const UserFormInput = styled.input.attrs({
+  type: 'text'
+})`
+  outline: none;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #e6e6e6;
+  transition: box-shadow .1s;
+  
+  :focus {
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+    
+    ::-webkit-input-placeholder {
+      color: transparent;
+    }
+    :-moz-input-placeholder {
+      color: transparent;
+    }
+  }
+`;
 
 const UserForm = props => {
   const handleFormSubmit = useCallback(
@@ -40,33 +80,29 @@ const UserForm = props => {
   useDocumentTitle(`Hello, ${props.firstName} ${props.lastName}`);
 
   return (
-    <div className={styles.userForm}>
+    <UserFormContainer>
       <form onSubmit={handleFormSubmit}>
-        <p className={styles.userFormBlock}>
+        <UserFormInputBlock>
           <label htmlFor="userFirstName">First name</label>
-          <input
-            type="text"
+          <UserFormInput
             id="userFirstName"
             placeholder="Enter first name..."
             value={props.firstName}
             onChange={handleFirstNameChange}
-            className={styles.userFormBlockInput}
           />
-        </p>
+        </UserFormInputBlock>
 
-        <p className={styles.userFormBlock}>
+        <UserFormInputBlock>
           <label htmlFor="userLastName">Last name</label>
-          <input
-            type="text"
+          <UserFormInput
             id="userLastName"
             placeholder="Enter last name..."
             value={props.lastName}
             onChange={handleLastNameChange}
-            className={styles.userFormBlockInput}
           />
-        </p>
+        </UserFormInputBlock>
       </form>
-    </div>
+    </UserFormContainer>
   );
 };
 
