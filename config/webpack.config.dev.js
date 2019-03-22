@@ -9,6 +9,39 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PostcssFlexbugsFixes = require('postcss-flexbugs-fixes');
 const AutoPrefixer = require('autoprefixer');
 
+const styleLoaders = isVendor => [
+  { loader: 'style-loader' },
+  {
+    loader: 'css-loader',
+    options: {
+      modules: !isVendor,
+      camelCase: true,
+      importLoaders: 1,
+      sourceMap: true,
+      localIdentName: '[local]__[hash:5]'
+    }
+  },
+  {
+    loader: 'postcss-loader',
+    options: {
+      ident: 'postcss',
+      plugins: [
+        PostcssFlexbugsFixes,
+        AutoPrefixer({
+          browsers: [
+            '>1%',
+            'last 4 versions',
+            'Firefox ESR',
+            'not ie < 9'
+          ],
+          flexbox: 'no-2009'
+        })
+      ]
+    }
+  },
+  { loader: 'stylus-loader' }
+];
+
 // Webpack config
 module.exports = webpackMerge(
   webpackBaseConfig,
@@ -36,38 +69,13 @@ module.exports = webpackMerge(
           oneOf: [
             {
               test: /\.(css|styl)$/,
-              use: [
-                { loader: 'style-loader' },
-                {
-                  loader: 'css-loader',
-                  options: {
-                    modules: true,
-                    camelCase: true,
-                    importLoaders: 1,
-                    sourceMap: true,
-                    localIdentName: '[local]__[hash:5]'
-                  }
-                },
-                {
-                  loader: 'postcss-loader',
-                  options: {
-                    ident: 'postcss',
-                    plugins: [
-                      PostcssFlexbugsFixes,
-                      AutoPrefixer({
-                        browsers: [
-                          '>1%',
-                          'last 4 versions',
-                          'Firefox ESR',
-                          'not ie < 9'
-                        ],
-                        flexbox: 'no-2009'
-                      })
-                    ]
-                  }
-                },
-                { loader: 'stylus-loader' }
-              ]
+              exclude: [/node_modules/],
+              use: styleLoaders(false)
+            },
+            {
+              test: /\.css$/,
+              exclude: [/src/],
+              use: styleLoaders(true)
             }
           ]
         }

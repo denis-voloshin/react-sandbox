@@ -11,6 +11,38 @@ const PostcssFlexbugsFixes = require('postcss-flexbugs-fixes');
 const AutoPrefixer = require('autoprefixer');
 const Cssnano = require('cssnano');
 
+const styleLoaders = isVendor => [
+  {
+    loader: 'css-loader',
+    options: {
+      modules: !isVendor,
+      camelCase: true,
+      sourceMap: true,
+      localIdentName: '[local]__[hash:5]'
+    }
+  },
+  {
+    loader: 'postcss-loader',
+    options: {
+      ident: 'postcss',
+      plugins: [
+        PostcssFlexbugsFixes,
+        AutoPrefixer({
+          browsers: [
+            '>1%',
+            'last 4 versions',
+            'Firefox ESR',
+            'not ie < 9'
+          ],
+          flexbox: 'no-2009'
+        }),
+        Cssnano
+      ]
+    }
+  },
+  { loader: 'stylus-loader' }
+];
+
 // Webpack config
 module.exports = webpackMerge(
   webpackBaseConfig,
@@ -77,39 +109,18 @@ module.exports = webpackMerge(
           oneOf: [
             {
               test: /\.(css|styl)$/,
+              exclude: [/node_modules/],
               use: ExtractTextWebpackPlugin.extract({
                 fallback: { loader: 'style-loader' },
-                use: [
-                  {
-                    loader: 'css-loader',
-                    options: {
-                      modules: true,
-                      camelCase: true,
-                      sourceMap: true,
-                      localIdentName: '[local]__[hash:5]'
-                    }
-                  },
-                  {
-                    loader: 'postcss-loader',
-                    options: {
-                      ident: 'postcss',
-                      plugins: [
-                        PostcssFlexbugsFixes,
-                        AutoPrefixer({
-                          browsers: [
-                            '>1%',
-                            'last 4 versions',
-                            'Firefox ESR',
-                            'not ie < 9'
-                          ],
-                          flexbox: 'no-2009'
-                        }),
-                        Cssnano
-                      ]
-                    }
-                  },
-                  { loader: 'stylus-loader' }
-                ]
+                use: styleLoaders(false)
+              })
+            },
+            {
+              test: /\.css$/,
+              exclude: [/src/],
+              use: ExtractTextWebpackPlugin.extract({
+                fallback: { loader: 'style-loader' },
+                use: styleLoaders(true)
               })
             }
           ]
