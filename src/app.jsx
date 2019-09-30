@@ -1,7 +1,7 @@
 import React from 'react';
 import { createGlobalStyle } from 'styled-components';
 
-import { HomePage } from '@Views/home/HomePage';
+import { HomePage } from '@Views/home/page';
 
 const GlobalStyle = createGlobalStyle`
   * {

@@ -28,12 +28,6 @@ const styleLoaders = isVendor => [
       plugins: [
         PostcssFlexbugsFixes,
         AutoPrefixer({
-          browsers: [
-            '>1%',
-            'last 4 versions',
-            'Firefox ESR',
-            'not ie < 9'
-          ],
           flexbox: 'no-2009'
         }),
         Cssnano
@@ -71,7 +65,9 @@ module.exports = webpackMerge(
 
               switch (packageName) {
                 case 'react':
-                case 'react-dom': {
+                case 'react-dom':
+                case 'redux':
+                case 'ramda': {
                   return packageName;
                 }
                 default: {

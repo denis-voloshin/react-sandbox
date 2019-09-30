@@ -227,7 +227,6 @@ module.exports = {
     "react/button-has-type": "warn",
     "react/default-props-match-prop-types": "warn",
     "react/display-name": "off",
-    "react/forbid-component-props": "warn",
     "react/no-access-state-in-setstate": "warn",
     "react/no-array-index-key": "warn",
     "react/no-children-prop": "warn",

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import * as userActions from '@Actions/userActions';
@@ -46,7 +46,13 @@ const UserFormInput = styled.input.attrs({
   }
 `;
 
-const UserForm = props => {
+export const UserForm = ({ className }) => {
+  const user = useSelector(state => state.user);
+  const dispatch = useDispatch();
+
+  const changeFirstName = firstName => dispatch(userActions.setFirstName(firstName));
+  const changeLastName = lastName => dispatch(userActions.setLastName(lastName));
+
   const handleFormSubmit = useCallback(
     e => {
       e.preventDefault();
@@ -62,7 +68,7 @@ const UserForm = props => {
       return;
     }
 
-    props.changeFirstName(firstName);
+    changeFirstName(firstName);
   });
 
   const handleLastNameChange = useCallback(e => {
@@ -74,20 +80,20 @@ const UserForm = props => {
       return;
     }
 
-    props.changeLastName(lastName);
+    changeLastName(lastName);
   });
 
-  useDocumentTitle(`Hello, ${props.firstName} ${props.lastName}`);
+  useDocumentTitle(`Hello, ${user.firstName} ${user.lastName}`);
 
   return (
-    <UserFormContainer>
+    <UserFormContainer className={className}>
       <form onSubmit={handleFormSubmit}>
         <UserFormInputBlock>
           <label htmlFor="userFirstName">First name</label>
           <UserFormInput
             id="userFirstName"
             placeholder="Enter first name..."
-            value={props.firstName}
+            value={user.firstName}
             onChange={handleFirstNameChange}
           />
         </UserFormInputBlock>
@@ -97,7 +103,7 @@ const UserForm = props => {
           <UserFormInput
             id="userLastName"
             placeholder="Enter last name..."
-            value={props.lastName}
+            value={user.lastName}
             onChange={handleLastNameChange}
           />
         </UserFormInputBlock>
@@ -105,16 +111,3 @@ const UserForm = props => {
     </UserFormContainer>
   );
 };
-
-const mapStateToProps = ({ user }) => user;
-
-const mapDispatchToProps = dispatch => ({
-  changeFirstName(firstName) {
-    dispatch(userActions.setFirstName(firstName));
-  },
-  changeLastName(lastName) {
-    dispatch(userActions.setLastName(lastName));
-  }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserForm);
