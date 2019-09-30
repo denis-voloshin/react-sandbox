@@ -1,5 +1,5 @@
-import * as R from 'ramda';
 import { handleActions } from 'redux-actions';
+import produce from 'immer';
 
 import * as userActions from '@Actions/userActions';
 
@@ -9,8 +9,16 @@ const initialState = {
 };
 
 const userReducer = handleActions({
-  [userActions.setFirstName]: (state, { payload: firstName }) => R.assoc('firstName', firstName, state),
-  [userActions.setLastName]: (state, { payload: lastName }) => R.assoc('lastName', lastName, state)
+  [userActions.setFirstName](state, { payload: firstName }) {
+    return produce(state, draft => {
+      draft.firstName = firstName;
+    });
+  },
+  [userActions.setLastName](state, { payload: lastName }) {
+    return produce(state, draft => {
+      draft.lastName = lastName;
+    });
+  }
 }, initialState);
 
 export { userReducer };

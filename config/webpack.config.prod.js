@@ -66,8 +66,7 @@ module.exports = webpackMerge(
               switch (packageName) {
                 case 'react':
                 case 'react-dom':
-                case 'redux':
-                case 'ramda': {
+                case 'lodash': {
                   return packageName;
                 }
                 default: {
