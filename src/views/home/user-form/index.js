@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
@@ -53,13 +53,7 @@ export const UserForm = ({ className }) => {
   const changeFirstName = firstName => dispatch(userActions.setFirstName(firstName));
   const changeLastName = lastName => dispatch(userActions.setLastName(lastName));
 
-  const handleFormSubmit = useCallback(
-    e => {
-      e.preventDefault();
-    }
-  );
-
-  const handleFirstNameChange = useCallback(e => {
+  const handleFirstNameChange = e => {
     const firstName = e.target.value;
 
     if (!/^[a-z]*$/i.test(firstName)) {
@@ -69,9 +63,9 @@ export const UserForm = ({ className }) => {
     }
 
     changeFirstName(firstName);
-  });
+  };
 
-  const handleLastNameChange = useCallback(e => {
+  const handleLastNameChange = e => {
     const lastName = e.target.value;
 
     if (!/^[a-z]*$/i.test(lastName)) {
@@ -81,33 +75,31 @@ export const UserForm = ({ className }) => {
     }
 
     changeLastName(lastName);
-  });
+  };
 
   useDocumentTitle(`Hello, ${user.firstName} ${user.lastName}`);
 
   return (
     <UserFormContainer className={className}>
-      <form onSubmit={handleFormSubmit}>
-        <UserFormInputBlock>
-          <label htmlFor="userFirstName">First name</label>
-          <UserFormInput
-            id="userFirstName"
-            placeholder="Enter first name..."
-            value={user.firstName}
-            onChange={handleFirstNameChange}
-          />
-        </UserFormInputBlock>
+      <UserFormInputBlock>
+        <label htmlFor="userFirstName">First name</label>
+        <UserFormInput
+          id="userFirstName"
+          placeholder="Enter first name..."
+          value={user.firstName}
+          onChange={handleFirstNameChange}
+        />
+      </UserFormInputBlock>
 
-        <UserFormInputBlock>
-          <label htmlFor="userLastName">Last name</label>
-          <UserFormInput
-            id="userLastName"
-            placeholder="Enter last name..."
-            value={user.lastName}
-            onChange={handleLastNameChange}
-          />
-        </UserFormInputBlock>
-      </form>
+      <UserFormInputBlock>
+        <label htmlFor="userLastName">Last name</label>
+        <UserFormInput
+          id="userLastName"
+          placeholder="Enter last name..."
+          value={user.lastName}
+          onChange={handleLastNameChange}
+        />
+      </UserFormInputBlock>
     </UserFormContainer>
   );
 };
